@@ -1,0 +1,121 @@
+{
+  "widgetName": "QuoteBuilder",
+  "version": "1.0.0",
+  "author": "Manaslu-HR",
+  "description": "Travel Quote Builder Widget voor Zoho Creator - DMC reisprogramma samenstellen",
+  "permissions": [
+    "data",
+    "api",
+    "records",
+    "forms"
+  ],
+  "entryPoint": "widget.html",
+  "dependencies": {
+    "external": [
+      {
+        "name": "Font Awesome",
+        "version": "6.4.0",
+        "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      },
+      {
+        "name": "SortableJS",
+        "version": "1.15.0",
+        "url": "https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"
+      }
+    ]
+  },
+  "settings": [
+    {
+      "name": "hotelbeds_api_key",
+      "label": "HotelBeds API Key",
+      "type": "text",
+      "required": true,
+      "description": "Your HotelBeds API Key from developer.hotelbeds.com"
+    },
+    {
+      "name": "hotelbeds_api_secret",
+      "label": "HotelBeds API Secret",
+      "type": "password",
+      "required": true,
+      "description": "Your HotelBeds API Secret from developer.hotelbeds.com"
+    },
+    {
+      "name": "default_currency",
+      "label": "Default Currency",
+      "type": "select",
+      "options": ["EUR", "USD", "GBP"],
+      "default": "EUR",
+      "required": true
+    },
+    {
+      "name": "default_margin_percentage",
+      "label": "Default Margin Percentage",
+      "type": "number",
+      "default": 15,
+      "min": 0,
+      "max": 100,
+      "required": false
+    }
+  ],
+  "forms": {
+    "Quote": [
+      "QuoteNumber",
+      "Client",
+      "StartDate",
+      "EndDate",
+      "TotalDays",
+      "TotalAmount",
+      "Status"
+    ],
+    "QuoteDays": [
+      "QuoteID",
+      "DayNumber",
+      "DayDate",
+      "DayTitle",
+      "DayNotes",
+      "DayTotal"
+    ],
+    "QuoteItems": [
+      "DayID",
+      "ItemType",
+      "ItemSource",
+      "ItemName",
+      "Description",
+      "StartTime",
+      "EndTime",
+      "UnitPrice",
+      "Quantity",
+      "TotalPrice"
+    ],
+    "Accommodations": [
+      "Name",
+      "Type",
+      "Location",
+      "StarRating",
+      "StandardRate",
+      "Description",
+      "ImageURL"
+    ]
+  },
+  "api": {
+    "hotelbeds": {
+      "baseUrl": "https://api.test.hotelbeds.com",
+      "endpoints": {
+        "hotels": "/hotel-api/1.0/hotels",
+        "availability": "/hotel-api/1.0/hotels",
+        "booking": "/hotel-api/1.0/bookings",
+        "activities": "/activity-api/3.0/activities",
+        "transfers": "/transfer-api/1.0/transfers"
+      }
+    }
+  },
+  "responsive": {
+    "mobile": true,
+    "tablet": true,
+    "desktop": true,
+    "breakpoints": {
+      "mobile": "768px",
+      "tablet": "1024px"
+    }
+  }
+}
