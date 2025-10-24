@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Quote Builder</title>
+    
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.css">
+    
+    <!-- Widget CSS -->
+    <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="builder-header">
+        <div class="header-left">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1>Quote Builder</h1>
+            <span class="client-badge" id="clientBadge">New Quote</span>
+        </div>
+        <div class="header-right">
+            <button class="btn-secondary" id="btnDraft">
+                <i class="fas fa-save"></i> Save Draft
+            </button>
+            <button class="btn-primary" id="btnSave">
+                <i class="fas fa-check"></i> Save
+            </button>
+        </div>
+    </header>
+
+    <!-- SIDEBAR OVERLAY (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="builder-container">
+        <!-- SIDEBAR -->
+        <aside class="builder-sidebar" id="builderSidebar">
+            <div class="sidebar-content">
+                <!-- Category Selection -->
+                <div class="category-header">
+                    <label for="categorySelect">Product Bron</label>
+                    <select id="categorySelect" class="category-select">
+                        <option value="catalog">Catalogus</option>
+                        <option value="api">HotelBeds API</option>
+                    </select>
+                </div>
+
+                <!-- CATALOG PANEL -->
+                <div id="catalogPanel" class="catalog-panel">
+                    <!-- Search Box -->
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Zoek producten...">
+                        <i class="fas fa-search"></i>
+                    </div>
+
+                    <!-- Type Filter -->
+                    <div class="type-filter">
+                        <button class="filter-btn active" data-type="all">
+                            <i class="fas fa-th"></i> Alle
+                        </button>
+                        <button class="filter-btn" data-type="accommodation">
+                            <i class="fas fa-hotel"></i> Hotels
+                        </button>
+                        <button class="filter-btn" data-type="transfer">
+                            <i class="fas fa-car"></i> Trans.
+                        </button>
+                        <button class="filter-btn" data-type="excursion">
+                            <i class="fas fa-ticket"></i> Excurs.
+                        </button>
+                        <button class="filter-btn" data-type="package">
+                            <i class="fas fa-box"></i> Packag.
+                        </button>
+                    </div>
+
+                    <!-- Catalog Items -->
+                    <div class="catalog-items" id="catalogItems">
+                        <!-- Items will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- API PANEL -->
+                <div id="apiPanel" class="api-panel" style="display: none;">
+                    <div class="api-form">
+                        <h3><i class="fas fa-hotel"></i> HotelBeds Zoeken</h3>
+                        
+                        <div class="form-group">
+                            <label>Bestemming</label>
+                            <input type="text" id="apiDestination" placeholder="Stad of land">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Check-in</label>
+                                <input type="date" id="apiCheckIn">
+                            </div>
+                            <div class="form-group">
+                                <label>Check-out</label>
+                                <input type="date" id="apiCheckOut">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Volwassenen</label>
+                                <input type="number" id="apiAdults" value="2" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Kinderen</label>
+                                <input type="number" id="apiChildren" value="0" min="0">
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary btn-block" id="btnApiSearch">
+                            <i class="fas fa-search"></i> Zoeken
+                        </button>
+                    </div>
+                    
+                    <div class="api-results" id="apiResults">
+                        <!-- API results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- TIMELINE AREA -->
+        <main class="timeline-area">
+            <!-- Quote Info Bar -->
+            <div class="quote-info-bar">
+                <div class="info-item">
+                    <label>Klant Naam</label>
+                    <input type="text" id="clientName" class="info-input" placeholder="Klant naam">
+                </div>
+                <div class="info-item">
+                    <label>Quote Nummer</label>
+                    <input type="text" id="quoteNumber" class="info-input" placeholder="Auto-generated" readonly>
+                </div>
+                <div class="info-item">
+                    <label>Status</label>
+                    <select id="quoteStatus" class="info-input">
+                        <option value="Draft">Draft</option>
+                        <option value="Sent">Sent</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Date Range Bar -->
+            <div class="date-range-bar">
+                <div class="date-inputs">
+                    <div class="date-group">
+                        <label>Startdatum:</label>
+                        <input type="date" id="startDate" class="date-input">
+                    </div>
+                    <div class="date-group">
+                        <label>Einddatum:</label>
+                        <input type="date" id="endDate" class="date-input">
+                    </div>
+                    <div class="date-group">
+                        <label>Dagen:</label>
+                        <input type="number" id="totalDays" class="date-input" min="1" value="7" style="width: 80px;">
+                    </div>
+                </div>
+                <button class="btn-primary" id="btnGenerateDays">
+                    <i class="fas fa-calendar-plus"></i> Genereer Dagen
+                </button>
+            </div>
+
+            <!-- Timeline Content -->
+            <div class="timeline-content" id="timelineContent">
+                <!-- Empty state -->
+                <div class="empty-timeline" id="emptyTimeline">
+                    <i class="fas fa-calendar-alt"></i>
+                    <p>Selecteer een startdatum en genereer dagen om te beginnen</p>
+                </div>
+                <!-- Days will be populated here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- SUMMARY BAR -->
+    <footer class="summary-bar">
+        <div class="summary-item">
+            <span class="summary-label">Totaal</span>
+            <span class="summary-value" id="summaryTotal">€ 0</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Dagen</span>
+            <span class="summary-value" id="summaryDays">0</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Hotels</span>
+            <span class="summary-value" id="summaryHotels">0</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Activiteiten</span>
+            <span class="summary-value" id="summaryActivities">0</span>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <!-- Initial Quote Modal -->
+    <div class="modal" id="initialModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-alt"></i> Nieuwe Quote</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Klant Selectie</label>
+                    <select id="clientType" class="form-control">
+                        <option value="new">Nieuwe Klant</option>
+                        <option value="existing">Bestaande Klant</option>
+                    </select>
+                </div>
+                
+                <div id="newClientFields">
+                    <div class="form-group">
+                        <label>Klant Naam *</label>
+                        <input type="text" id="modalClientName" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div id="existingClientFields" style="display: none;">
+                    <div class="form-group">
+                        <label>Selecteer Klant *</label>
+                        <select id="existingClient" class="form-control">
+                            <option value="">-- Selecteer klant --</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Startdatum *</label>
+                    <input type="date" id="modalStartDate" class="form-control" required>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="btnCancelInitial">Annuleren</button>
+                <button class="btn-primary" id="btnNextInitial">Volgende</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Item Modal -->
+    <div class="modal" id="editItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Item Bewerken</h2>
+                <button class="modal-close" id="btnCloseEditItem">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Item Naam</label>
+                    <input type="text" id="editItemName" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Beschrijving</label>
+                    <textarea id="editItemDescription" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Starttijd</label>
+                        <input type="time" id="editItemStartTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Eindtijd</label>
+                        <input type="time" id="editItemEndTime" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Prijs</label>
+                        <input type="number" id="editItemPrice" class="form-control" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Marge (%)</label>
+                        <input type="number" id="editItemMargin" class="form-control" step="1" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Leverancier</label>
+                    <input type="text" id="editItemSupplier" class="form-control">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="btnCancelEditItem">Annuleren</button>
+                <button class="btn-primary" id="btnSaveEditItem">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Laden...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="toast-icon"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    
+    <!-- Widget Scripts -->
+    <script src="utils/helpers.js"></script>
+    <script src="utils/dragdrop.js"></script>
+    <script src="utils/api.js"></script>
+    <script src="components/sidebar.js"></script>
+    <script src="components/timeline.js"></script>
+    <script src="components/day-card.js"></script>
+    <script src="components/item-card.js"></script>
+    <script src="components/search-modal.js"></script>
+    <script src="components/api-search.js"></script>
+    <script src="widget.js"></script>
+</body>
+</html>
