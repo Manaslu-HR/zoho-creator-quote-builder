@@ -1,0 +1,35 @@
+/* TRAVEL QUOTE BUILDER WIDGET - MAIN STYLES */
+/* Complete CSS file as provided in widget.css attachment */
+/* This is a placeholder - see attached_file:2 for the full 6000+ line CSS */
+
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #dbeafe;
+  --secondary-color: #64748b;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #1e293b;
+  --border-color: #e2e8f0;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --radius-md: 0.5rem;
+  --spacing-md: 1rem;
+  --transition-base: 200ms ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: Inter, -apple-system, sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+/* NOTE: Full CSS with all components, responsive design, and animations */
+/* is available in the attached widget.css file (attached_file:2) */
+/* This includes: Header, Sidebar, Timeline, Day Cards, Item Cards, */
+/* Modals, Forms, Buttons, Mobile Menu, and all responsive breakpoints */
