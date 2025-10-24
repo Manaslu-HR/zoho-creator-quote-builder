@@ -58,4 +58,4 @@ const ZohoAPI = {
 };
 
 // Export
-window.ZohoAPI = ZohoAPI;
+window.API = ZohoAPI;
