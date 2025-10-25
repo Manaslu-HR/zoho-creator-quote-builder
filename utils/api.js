@@ -23,7 +23,7 @@ const ZohoAPI = {
             
             // Use Zoho Creator SDK
             const response = await ZOHO.CREATOR.API.addRecord({
-                appName: 'travel-quote-builder',
+                appName: 'bookings',
                 formName: 'Quote',
                 data: data
             });
@@ -39,7 +39,7 @@ const ZohoAPI = {
     async loadQuote(quoteId) {
         try {
             const response = await ZOHO.CREATOR.API.getRecordById({
-                appName: 'travel-quote-builder',
+                appName: 'bookings',
                 formName: 'Quote',
                 id: quoteId
             });
@@ -60,7 +60,7 @@ const ZohoAPI = {
         async fetchRecords(formName, criteria = '') {
                     try {
                                     const response = await ZOHO.CREATOR.API.getAllRecords({
-                                                        appName: 'travel-quote-builder',
+                                                        appName: 'bookings',
                                                         formName: formName,
                                                         criteria: criteria
                                                     });
