@@ -63,7 +63,7 @@ const QuoteBuilder = {
         
         // Search and filters
         document.getElementById('searchInput')?.addEventListener('input', (e) => this.filterCatalog(e.target.value));
-        document.querySelectorAll('.filter-btn').forEach(btn => {
+//         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => this.setFilter(btn.dataset.type));
         });
         
