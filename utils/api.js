@@ -55,6 +55,22 @@ const ZohoAPI = {
         // Implementation for loading catalog from Zoho Creator
         return [];
     }
+
+                        // Fetch records from Zoho Creator form
+        async fetchRecords(formName, criteria = '') {
+                    try {
+                                    const response = await ZOHO.CREATOR.API.getAllRecords({
+                                                        appName: 'travel-quote-builder',
+                                                        formName: formName,
+                                                        criteria: criteria
+                                                    });
+
+                                    return response.data || [];
+                                } catch (error) {
+                                    console.error(`Error fetching records from ${formName}:`, error);
+                                    return [];
+                                }
+                },
 };
 
 // Export
